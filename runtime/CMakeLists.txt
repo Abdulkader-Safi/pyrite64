@@ -2,10 +2,29 @@ cmake_minimum_required(VERSION 3.28)
 
 # Runtime engine library
 add_library(pyrite64-runtime STATIC
+    # Platform
     src/platform/window.cpp
     src/platform/input.cpp
     src/platform/audio.cpp
     src/platform/filesystem.cpp
+
+    # Engine lib
+    src/engine/lib/math.cpp
+
+    # Engine collision
+    src/engine/collision/shapes.cpp
+    src/engine/collision/bvh.cpp
+    src/engine/collision/mesh.cpp
+    src/engine/collision/meshLoader.cpp
+    src/engine/collision/resolver.cpp
+    src/engine/collision/scene.cpp
+    src/engine/collision/attach.cpp
+
+    # Engine scene
+    src/engine/scene/object.cpp
+    src/engine/scene/scene.cpp
+    src/engine/scene/sceneManager.cpp
+    src/engine/scene/componentTable.cpp
 )
 
 target_include_directories(pyrite64-runtime PUBLIC
@@ -17,6 +36,7 @@ target_include_directories(pyrite64-runtime PUBLIC
 target_compile_definitions(pyrite64-runtime PUBLIC
     PLATFORM_PC
     GLM_FORCE_QUAT_DATA_XYZW
+    GLM_ENABLE_EXPERIMENTAL
 )
 
 target_link_libraries(pyrite64-runtime PUBLIC
