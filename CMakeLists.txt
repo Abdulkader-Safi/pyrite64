@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-    message(FATAL_ERROR
+  message(FATAL_ERROR
         "In-source builds are disabled.\n"
         "Run: cmake --preset <name>")
 endif()
@@ -313,46 +313,51 @@ target_link_libraries(pyrite64 PRIVATE
 )
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    target_compile_definitions(pyrite64 PRIVATE "HAS_SHADER_CROSS=1")
-    target_link_libraries(pyrite64 PRIVATE
+  target_compile_definitions(pyrite64 PRIVATE "HAS_SHADER_CROSS=1")
+  target_link_libraries(pyrite64 PRIVATE
         SDL3_shadercross::SDL3_shadercross-static
     )
 endif()
 
 if(MINGW)
-    set(APP_ICON_RESOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/icon.rc")
-    target_sources(pyrite64 PRIVATE ${APP_ICON_RESOURCE})
+  set(APP_ICON_RESOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/icon.rc")
+  target_sources(pyrite64 PRIVATE ${APP_ICON_RESOURCE})
 
-    target_link_options(pyrite64 PRIVATE
+  target_link_options(pyrite64 PRIVATE
         -static-libgcc
         -static-libstdc++
         --static
     )
 endif()
 
+option(PYRITE_BUILD_RUNTIME "Build the desktop/mobile game runtime" OFF)
+if(PYRITE_BUILD_RUNTIME)
+  add_subdirectory(runtime)
+endif()
+
 # Install rules for Linux
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    # Install the executable to $HOME/.local/bin
-    install(TARGETS pyrite64 RUNTIME DESTINATION bin)
+  # Install the executable to $HOME/.local/bin
+  install(TARGETS pyrite64 RUNTIME DESTINATION bin)
 
-    # Install the directories with data needed at runtime to $HOME/.local/share/htd/pyrite64
-    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/data"
+  # Install the directories with data needed at runtime to $HOME/.local/share/htd/pyrite64
+  install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/data"
         DESTINATION "share/${PYRITE_ORG_NAME}/${PYRITE_APP_NAME}")
-    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/n64"
+  install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/n64"
         DESTINATION "share/${PYRITE_ORG_NAME}/${PYRITE_APP_NAME}")
 
-    # Install the desktop entry file to the appropriate location to get integration with desktop environment launcher such as KDE Application Launcher
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/desktop.file"
+  # Install the desktop entry file to the appropriate location to get integration with desktop environment launcher such as KDE Application Launcher
+  install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/desktop.file"
         DESTINATION share/applications
         RENAME "${PYRITE_APP_NAME}.desktop")
 
-    # Install the desktop entry file to the appropriate location to get integration with desktop environment launcher such as KDE Application Launcher
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/mimetype.xml"
+  # Install the desktop entry file to the appropriate location to get integration with desktop environment launcher such as KDE Application Launcher
+  install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/mimetype.xml"
         DESTINATION share/mime/packages
         RENAME "${PYRITE_APP_NAME}.xml")
 
-    # Install the icon to the appropriate location for the desktop entry file to find it
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/img/windowIcon.png"
+  # Install the icon to the appropriate location for the desktop entry file to find it
+  install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/img/windowIcon.png"
         DESTINATION share/icons/hicolor/256x256/apps
         RENAME "${PYRITE_APP_NAME}.png")
 endif()

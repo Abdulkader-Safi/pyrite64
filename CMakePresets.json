@@ -32,6 +32,15 @@
       }
     },
     {
+      "name": "macos-base",
+      "hidden": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
+    },
+    {
       "name": "debug-base",
       "hidden": true,
       "cacheVariables": {
@@ -64,6 +73,16 @@
       "name": "linux-release",
       "displayName": "Linux x86_64 Release",
       "inherits": ["gcc-base", "linux-base", "release-base"]
+    },
+    {
+      "name": "macos-debug",
+      "displayName": "macOS Debug",
+      "inherits": ["gcc-base", "macos-base", "debug-base"]
+    },
+    {
+      "name": "macos-release",
+      "displayName": "macOS Release",
+      "inherits": ["gcc-base", "macos-base", "release-base"]
     }
   ],
 
@@ -87,6 +106,16 @@
       "name": "linux-release",
       "configurePreset": "linux-release",
       "jobs": 0
+    },
+    {
+      "name": "macos-debug",
+      "configurePreset": "macos-debug",
+      "jobs": 0
+    },
+    {
+      "name": "macos-release",
+      "configurePreset": "macos-release",
+      "jobs": 0
     }
   ],
 
@@ -95,16 +124,22 @@
       "name": "windows-gcc",
       "steps": [
         { "type": "configure", "name": "windows-gcc-release" },
-        { "type": "build",     "name": "windows-gcc-release" }
+        { "type": "build", "name": "windows-gcc-release" }
       ]
     },
     {
       "name": "linux",
       "steps": [
         { "type": "configure", "name": "linux-release" },
-        { "type": "build",     "name": "linux-release" }
+        { "type": "build", "name": "linux-release" }
+      ]
+    },
+    {
+      "name": "macos",
+      "steps": [
+        { "type": "configure", "name": "macos-release" },
+        { "type": "build", "name": "macos-release" }
       ]
     }
   ]
-
 }
